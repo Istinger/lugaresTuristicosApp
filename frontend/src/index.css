@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+
+.glass-effect {
+    background: rgba(251, 250, 249, 0.85);
+    backdrop-filter: blur(12px);
+}
+
+.dark .glass-effect {
+    background: rgba(34, 38, 42, 0.85);
+}
+
+.andean-pattern {
+    background-image: radial-gradient(#1f6b7a 0.5px, transparent 0.5px);
+    background-size: 12px 12px;
+    opacity: 0.1;
+}
+
+.quito-pattern {
+  background-image:
+    linear-gradient(rgba(251, 250, 249, 0.92), rgba(251, 250, 249, 0.92)),
+    url(https://lh3.googleusercontent.com/aida-public/AB6AXuAOVKJIn9OxvYWuGlI85I2A8BmFDYn12LWOb0Wy_IDQc4XR4o4X4xm9qTBOVjov9BOfHkEffKrBGf_KUdDZGykhwOfH3n1aJC3W1aa5L-mj0bQpVGw5cL198Oa635mE3YxeHylIWQDtb_C8By_ug3Yssx8GR5F5ZgDcQqJkMcA2UEOIA7SEyoujTIqtT-hBFZFh4kv34fRJWMzhY68NJxgkxXwKYyEPo3Kg5Tvs8aX-kAkfY0zQ-635k5tlIUGYIcd7tipQF_N3T6g);
+  background-size: cover;
+  background-position: center;
+}
+
+.dark .quito-pattern {
+  background-image:
+    linear-gradient(rgba(34, 38, 42, 0.95), rgba(34, 38, 42, 0.95)),
+    url(https://lh3.googleusercontent.com/aida-public/AB6AXuD6zZS0rokE7ygM2_L7zvPYnSebjj2gp4Gdfn97-MxIcOFErwT11_wyi_XQUeq3Mhzgsmq_QHXL-tvnT1d_d3BxygHWCM0RnaLSUgF4SO59ZCZonduKPP7uXlyjsrkFiklihpQIPo08C_dglXW1dGP85BSXhJxwz_TzMxBXoT6xQQFX5e9T82RlHXEpcT58iqHPI0cb6GwS3NPjxpz3smuGUtm8CqxtVqEFWuUZ9PpoMbTM6xhkKAaeh3wr5SAPYL6iqkEH9i3ATXQ);
+}
