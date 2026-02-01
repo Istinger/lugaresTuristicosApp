@@ -55,7 +55,8 @@ const listAttraction = async (req, res) => {
 //delete an attraction
 const deleteAttraction = async (req, res) => {
     try {
-        await atractionsModel.findByIdAndDelete(req.body.id);
+        const { id } = req.params;
+        await atractionsModel.findByIdAndDelete(id);
         res.json({success:true, message:"Attraction deleted successfully"});
     } catch (error) {
         console.log(error);
@@ -65,8 +66,8 @@ const deleteAttraction = async (req, res) => {
 //function for singel attraction details
 const singleAttraction = async (req, res) => {
     try {
-        const {attractionId} = req.body
-        const attraction = await atractionsModel.findById(attractionId);
+        const { id } = req.params;
+        const attraction = await atractionsModel.findById(id);
         res.json({success:true, attraction});
     } catch (error) {
         console.log(error);
