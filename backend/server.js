@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloudinary.js';
+import authRouter from './routes/authRouter.js';
 import userRouter from './routes/userRouter.js';
 import attractionRouter from './routes/attractionRouter.js';
 
@@ -22,6 +23,7 @@ app.use(cors());//access backend from any API
 
 //api endpoints
 
+app.use('/api/auth',authRouter)
 app.use('/api/users',userRouter)
 app.use('/api/attractions',attractionRouter);
 app.get('/', (req, res) => {

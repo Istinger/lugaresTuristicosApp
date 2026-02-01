@@ -1,5 +1,5 @@
 import express from 'express';
-import { addAttraction, listAttraction, deleteAttraction, singleAttraction } from '../controllers/atractionsController.js';
+import { addAttraction, listAttraction, deleteAttraction, singleAttraction, updateAttraction, patchAttraction } from '../controllers/atractionsController.js';
 import upload from '../middleware/multer.js';
 
 const attractionRouter = express.Router();
@@ -13,6 +13,12 @@ attractionRouter.get('/:id', singleAttraction);
 
 // POST /api/attractions - Crear una nueva atracción
 attractionRouter.post('/',upload.fields([{name:'image1',maxCount:1}, {name:'image2',maxCount:1}, {name:'image3',maxCount:1},{name:'image4',maxCount:1}]), addAttraction);
+
+// PUT /api/attractions/:id - Actualizar completamente una atracción
+attractionRouter.put('/:id',upload.fields([{name:'image1',maxCount:1}, {name:'image2',maxCount:1}, {name:'image3',maxCount:1},{name:'image4',maxCount:1}]), updateAttraction);
+
+// PATCH /api/attractions/:id - Actualizar parcialmente una atracción
+attractionRouter.patch('/:id',upload.fields([{name:'image1',maxCount:1}, {name:'image2',maxCount:1}, {name:'image3',maxCount:1},{name:'image4',maxCount:1}]), patchAttraction);
 
 // DELETE /api/attractions/:id - Eliminar una atracción
 attractionRouter.delete('/:id', deleteAttraction);

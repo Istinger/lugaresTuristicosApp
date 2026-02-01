@@ -74,8 +74,138 @@ const registerUser = async (req, res) => {
 
 //Route for admin login
 const loginAdmin = async (req, res) => {
-   
+   try {
+        const {email, password} = req.body;
+        
+        // Verificar credenciales de admin (puedes usar variables de entorno)
+        if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+            const token = jwt.sign({email, role: 'admin'}, process.env.JWT_SECRET);
+            res.json({success:true, token});
+        } else {
+            res.json({success:false, message:"Invalid admin credentials"});
+        }
+   } catch (error) {
+        console.log(error);
+        res.json({success:false, message:error.message});
+   }
+}
+
+// ========== CRUD DE USUARIOS ==========
+
+// Listar todos los usuarios (GET)
+const listUsers = async (req, res) => {
+    try {
+        const users = await userModel.find({}).select('-password'); // No enviar contraseñas
+        res.json({success:true, users});
+    } catch (error) {
+        console.log(error);
+        res.json({success:false, message:error.message});
+    }
+}
+
+// Obtener un usuario específico (GET)
+const getUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await userModel.findById(id).select('-password');
+        
+        if (!user) {
+            return res.json({success:false, message:"User not found"});
+        }
+        
+        res.json({success:true, user});
+    } catch (error) {
+        console.log(error);
+        res.json({success:false, message:error.message});
+    }
+}
+
+// Actualizar usuario completamente (PUT)
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {name, email, password} = req.body;
+        
+        const user = await userModel.findById(id);
+        if (!user) {
+            return res.json({success:false, message:"User not found"});
+        }
+
+        // Validar email si se proporciona
+        if (email && !validator.isEmail(email)) {
+            return res.json({success:false, message:"Please enter a valid email"});
+        }
+
+        // Si se actualiza la contraseña, hashearla
+        let updateData = { name, email };
+        if (password) {
+            if (password.length < 8) {
+                return res.json({success:false, message:"Password must be at least 8 characters"});
+            }
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            updateData.password = hashedPassword;
+        }
+
+        await userModel.findByIdAndUpdate(id, updateData);
+        res.json({success:true, message:"User updated successfully"});
+    } catch (error) {
+        console.log(error);
+        res.json({success:false, message:error.message});
+    }
+}
+
+// Actualizar usuario parcialmente (PATCH)
+const patchUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        const user = await userModel.findById(id);
+        if (!user) {
+            return res.json({success:false, message:"User not found"});
+        }
+
+        const updateData = {};
+        
+        if (req.body.name) updateData.name = req.body.name;
+        
+        if (req.body.email) {
+            if (!validator.isEmail(req.body.email)) {
+                return res.json({success:false, message:"Please enter a valid email"});
+            }
+            updateData.email = req.body.email;
+        }
+        
+        if (req.body.password) {
+            if (req.body.password.length < 8) {
+                return res.json({success:false, message:"Password must be at least 8 characters"});
+            }
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(req.body.password, salt);
+            updateData.password = hashedPassword;
+        }
+
+        if (req.body.favData) updateData.favData = req.body.favData;
+
+        await userModel.findByIdAndUpdate(id, updateData);
+        res.json({success:true, message:"User partially updated successfully"});
+    } catch (error) {
+        console.log(error);
+        res.json({success:false, message:error.message});
+    }
+}
+
+// Eliminar usuario (DELETE)
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await userModel.findByIdAndDelete(id);
+        res.json({success:true, message:"User deleted successfully"});
+    } catch (error) {
+        console.log(error);
+        res.json({success:false, message:error.message});
+    }
 }
 
 
-export { loginUser, registerUser, loginAdmin };
+export { loginUser, registerUser, loginAdmin, listUsers, getUser, updateUser, patchUser, deleteUser };
