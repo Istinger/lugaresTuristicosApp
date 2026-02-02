@@ -1,0 +1,32 @@
+import { useState } from "react";
+import axios from "axios";
+import { use } from "react";
+import { useEffect } from "react";
+import {toast} from 'react-hot-toast';
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+const [places,setPlaces] = useState([]);
+
+const getPlaces = async () => {
+   try {
+    const response = await axios.get(`${backendUrl}/api/attractions`);
+    if(response.data.success){
+        setPlaces(response.data.attractions);
+    }else{
+        toast.error(response.data.message);
+    }
+   } catch (error) {
+    console.log(error);
+    toast.error(error.message);
+   }
+}
+
+useEffect(() => {
+    getPlaces();
+}, []);
+
+export {backendUrl,places};
+
+
+

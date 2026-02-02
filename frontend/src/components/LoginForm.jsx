@@ -1,7 +1,19 @@
+import { useState, useContext } from 'react';
+import { AppContext } from '../context/AppContext';
+
 export default function LoginForm() {
+    const { login, loading } = useContext(AppContext);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await login(email, password);
+    }
+
     return (
         <>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
                 {/* Email */}
                 <div>
                     <label className="block text-sm font-semibold mb-1">
@@ -10,6 +22,9 @@ export default function LoginForm() {
                     <input
                         type="email"
                         placeholder="e.g. tourist@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
                         className="
               w-full h-12
               rounded-xl
@@ -41,6 +56,9 @@ export default function LoginForm() {
                     <input
                         type="password"
                         placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
                         className="
               w-full h-12
               rounded-xl
@@ -58,6 +76,7 @@ export default function LoginForm() {
                 {/* Submit */}
                 <button
                     type="submit"
+                    disabled={loading}
                     className="
             w-full h-12
             bg-primary
@@ -67,9 +86,11 @@ export default function LoginForm() {
             shadow-md
             hover:bg-primary/90
             transition-colors
+            disabled:opacity-50
+            disabled:cursor-not-allowed
           "
                 >
-                    Log In
+                    {loading ? 'Logging in...' : 'Log In'}
                 </button>
             </form>
 
